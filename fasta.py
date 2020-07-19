@@ -1,36 +1,38 @@
 #import re
+import os
 import regex as re
 
 extensions = ['.txt','.fasta','.fa']
-#prompt the user for filename
-#filename = input("Enter the name of the file to analize:\n")
-
-##Chech the extension
 filename = ''
-#reg0 = reg0.match(filename)
+content = ''
 
 #get the file and check the extension
 while True:
+    #prompt the user for input
     filename = input("Enter the name of the file to analize:\n")
-    #reg0 = re.compile('\.\w*')
+    #find the extension
     reg0 = re.findall('\.\w*', filename)
+
     if not reg0:
         print('No extension found!')
         continue
 
-    if len(reg0) > 1:
-        print("Too many file extensions!")
-        continue
-    if reg0[0] in extensions: 
-        break
+    if reg0[0] in extensions:
+        try: 
+            with open(filename, 'r') as f:
+                content = f.read()
+        except:
+            print('Empty or not existing file!')
+            continue
+        break       
+    else:
+        print("Extension not allowed!")
 
-    print("Extension not allowed!")
+    
     
 
-#stock the content of the file
-with open(filename, 'r') as f:
-    content = f.read()
 
+print("out of the loop")
 #make it list of lines
 content = content.splitlines()
 
