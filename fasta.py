@@ -2,9 +2,17 @@
 import os
 import regex as re
 
+accessionnumber = '[A-Z]{,6}[0-9]{,8}\.[0-9]'
+ginumber = '\d*'
+locus = '.*\n'
+databases = [('Genbank', f'^\>gi\|{ginumber}\|gb\|{accessionnumber}\| {locus}')]
 extensions = ['.txt','.fasta','.fa']
 filename = ''
 content = ''
+#try
+
+
+
 
 #get the file and check the extension
 while True:
@@ -27,20 +35,24 @@ while True:
         break       
     else:
         print("Extension not allowed!")
+  
 
-    
-    
+#Look for seuqence id:
+print(f"content is: \n {content}")
 
+for dbname, regex0 in databases:
+    print(dbname, regex0)
+    found = re.findall(regex0, content)
+    if found:
+        print(found)
+        print(f"DATABASE:       {dbname}")
+        break
 
-print("out of the loop")
-#make it list of lines
-content = content.splitlines()
-
-reg1 = re.compile("^>.*$/s")
+reg1 = re.findall(">[a-b]", content)
 print(reg1)
-Identifiant = reg1.match(content[0])
-print(f'Idenfiant is : {Identifiant}', content)
+Identifiant = reg1.match(content)
+print(f'Idenfiant is : {Identifiant}')
 
-for index, ligne in enumerate(content):
-    print(f"ligne{index} : {ligne}")
+#for index, ligne in enumerate(content):
+    #print(f"ligne{index} : {ligne}")
 
