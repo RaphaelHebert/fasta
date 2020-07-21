@@ -44,14 +44,17 @@ for dbname, regex0 in databases:
     print(dbname, regex0)
     found = re.findall(regex0, content)
     if found:
-        print(found)
-        print(f"DATABASE:       {dbname}")
+        print(found[0])
+        print(f"DATABASE:           {dbname}")
+        accessionnumber1 = re.findall(accessionnumber, found[0])
+        print(f'Accessionnumber is: {accessionnumber1[0]}')
+        ginumber1 = re.findall(ginumber, found[0])
+        print(f'ginumber is: {ginumber1[0]}')
+        locus1 = re.findall(f"\|{locus}", found[0])
+        print(f'locus is: {locus1}')
         break
 
-reg1 = re.findall(">[a-b]", content)
-print(reg1)
-Identifiant = reg1.match(content)
-print(f'Idenfiant is : {Identifiant}')
+
 
 #for index, ligne in enumerate(content):
     #print(f"ligne{index} : {ligne}")
