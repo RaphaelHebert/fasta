@@ -3,7 +3,7 @@ import os
 import regex as re
 
 accessionnumber = '[A-Z]{,6}[0-9]{,8}\.[0-9]'
-ginumber = '\d*'
+ginumber = '[0-9]+'
 locus = '.*\n'
 databases = [('Genbank', f'^\>gi\|{ginumber}\|gb\|{accessionnumber}\| {locus}')]
 extensions = ['.txt','.fasta','.fa']
@@ -38,10 +38,8 @@ while True:
   
 
 #Look for seuqence id:
-print(f"content is: \n {content}")
-
 for dbname, regex0 in databases:
-    print(dbname, regex0)
+    #print(dbname, regex0)
     found = re.findall(regex0, content)
     if found:
         print(found[0])
@@ -50,8 +48,8 @@ for dbname, regex0 in databases:
         print(f'Accessionnumber is: {accessionnumber1[0]}')
         ginumber1 = re.findall(ginumber, found[0])
         print(f'ginumber is: {ginumber1[0]}')
-        locus1 = re.findall(f"\|{locus}", found[0])
-        print(f'locus is: {locus1}')
+        locus0 = re.findall(f"[^\|]+\n", found[0])
+        print(f'locus is: {locus0[0]}')
         break
 
 
