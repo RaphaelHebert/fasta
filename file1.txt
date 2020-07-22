@@ -1,2 +1,3 @@
 >Id123|blabla|etc ahahaha
 ATCGATCGATCGGGTAGCTAGCTTCGATTCGGAGATC
+blablabla
