@@ -54,6 +54,4 @@ for dbname, regex0 in databases:
 
 
 
-#for index, ligne in enumerate(content):
-    #print(f"ligne{index} : {ligne}")
 
