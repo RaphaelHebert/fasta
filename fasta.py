@@ -2,6 +2,7 @@
 import pandas as pd
 import os
 import regex as re
+import numpy as np
 
 accessionnumber = '[A-Z]{,6}[0-9]{,8}\.[0-9]'
 ginumber = '[0-9]+'
@@ -59,20 +60,17 @@ for dbname, regex0 in databases:
 pattern = re.compile('.')
 matches = pattern.finditer(content)
 
-mydict1 = {}
+mylist1 = []
 for match in matches:
-    print (match.end)
-    if match.group not in mydict1.keys():
-        mydict1[match.group] = ([],[])
-    mydict1[match.group][0].append(1)
-    mydict1[match.group][1].append(match.end)
+    #print (match.group())
+    mylist1.append({ 'Position': match.end(), match.group(): 1})
     
-mydict1 = pd.DataFrame(mydict1)
-print(mydict1)
-#stuck on git push again !!!
+mydf = pd.DataFrame(mylist1)
 
+mydf = mydf.replace(np.nan, 0)
 
-
+for col, row in mydf.iteritems():
+    print(f'Number of {col} : {sum(row)}')
 
 
 
