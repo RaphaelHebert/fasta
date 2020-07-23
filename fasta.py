@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import regex as re
 import numpy as np
+import matplotlib.pyplot as plt
 
 accessionnumber = '[A-Z]{,6}[0-9]{,8}\.[0-9]'
 ginumber = '[0-9]+'
@@ -11,6 +12,10 @@ databases = [('Genbank', f'^\>gi\|{ginumber}\|gb\|{accessionnumber}\| {locus}')]
 extensions = ['.txt','.fasta','.fa']
 filename = ''
 content = ''
+
+#codons
+initiation = "ATG"
+stop = "TAA|TAG|TGA"
 
 
 
@@ -55,8 +60,15 @@ for dbname, regex0 in databases:
         #delete the sequence id
         content = content.replace(found[0],'',1)
         break
+    else:
+        first = '>.*\n'
+        firstline = re.findall(first, content)
+        print(firstline)
+        content = content.replace(firstline[0],'',1)
+        
 
-#put every caracter in         
+######################Look at the sequence #######################
+#char by char        
 pattern = re.compile('.')
 matches = pattern.finditer(content)
 
@@ -67,10 +79,35 @@ for match in matches:
     
 mydf = pd.DataFrame(mylist1)
 
-mydf = mydf.replace(np.nan, 0)
+mydf = mydf.fillna(0)
+mydf = mydf.set_index(mydf['Position'])
+#print(mydf)
+listA = mydf['A'].tolist()
+print(listA)
+plt.hist(x = listA, bins = 160)
+plt.show()
 
+#NUMBER OF EACH BASE
 for col, row in mydf.iteritems():
-    print(f'Number of {col} : {sum(row)}')
+    if col == "Position":
+        print(f'Number of {col} :   {max(row)}')
+    else:
+        print(f'Number of {col} :           {sum(row)}')
 
+#GC CONTENT
+print(f"GC content :         {(sum(mydf['G']) + sum(mydf['C']))/max(mydf['Position'])}")
 
+#FIND THE START AND STOP CODONS
+start = re.compile(initiation)
+end = re.compile(stop)
 
+start = start.finditer(content)
+stop0  = end.finditer(content)
+mylist2 = []
+
+for (startcodon, stopcodon) in zip(start, stop0):
+    mylist2.append({'Position': startcodon.start(), 'Start (ATG)': startcodon.group()})
+    mylist2.append({'Position': stopcodon.start(), 'Stop (TAA, TAG,TGA)': stopcodon.group()})
+
+features = pd.DataFrame(mylist2)
+print(features.sort_values('Position'))
